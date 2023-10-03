@@ -1,27 +1,38 @@
 export default function Table({ products }) {
   return (
-    <div>
+    <div className="px-12 py-5 border rounded-md bg-white shadow">
       <table>
-        <thead>
+        <thead className="border-b">
           <tr>
-            <th>#</th>
-            <th>Imagem</th>
-            <th>Titulo</th>
-            <th>Categoria</th>
-            <th>Preco</th>
-            <th>Avaliacao</th>
+            <th className="pb-3 w-1/6 text-center">#</th>
+            <th className="pb-3 w-1/6 text-center">Imagem</th>
+            <th className="pb-3 w-1/6 text-center">Titulo</th>
+            <th className="pb-3 w-1/6 text-center">Categoria</th>
+            <th className="pb-3 w-1/6 text-center">Preco</th>
+            <th className="pb-3 w-1/6 text-center">Avaliacao</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => {
             return (
               <tr key={product.id}>
-                <td>{product.id}</td>
-                <td>{product.image}</td>
-                <td>{product.title}</td>
-                <td>{product.category}</td>
-                <td>{product.price}</td>
-                <td>{product.rating.rate}</td>
+                <td className="text-center py-3">{product.id}</td>
+                <td className="flex items-center justify-center py-3">
+                  <img
+                    className="rounded-full w-24 h-24 object-contain"
+                    src={product.image}
+                    alt=""
+                  />
+                </td>
+                <td className="text-center py-3">{product.title}</td>
+                <td className="text-center py-3">{product.category}</td>
+                <td className="text-center py-3">
+                  {product.price.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </td>
+                <td className="text-center py-3">{product.rating.rate}</td>
               </tr>
             );
           })}

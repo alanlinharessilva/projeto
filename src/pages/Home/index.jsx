@@ -1,26 +1,40 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Table from "../../components/Table";
+import Header from "../../components/Header";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [userName, setUserName] = useState("");
+
   async function getAllProducts() {
-    const response = await axios.get("https://fakestoreapi.com/products");
+    const response = await axios.get(
+      "https://fakestoreapi.com/products?limit=5"
+    );
     if (response.data) {
       setProducts(response.data);
     }
-    console.log(response);
   }
 
+  async function getUserName() {
+    const response = await axios.get("https://fakestoreapi.com/users/1");
+    if (response.data) {
+      const name = response.data.name.firstname;
+      const firstLetterUpperCase = name[0].toUpperCase() + name.substring(1);
+
+      setUserName(firstLetterUpperCase);
+    }
+  }
   useEffect(() => {
     getAllProducts();
+    getUserName();
   }, []);
   return (
     <>
-      <h1>Pagina Inicial</h1>
-      <div>
+      <Header userName={userName} />
+      <main className="bg-gray-50 px-20 py-8">
         <Table products={products} />
-      </div>
+      </main>
     </>
   );
 }
