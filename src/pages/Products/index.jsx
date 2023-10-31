@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Table from "../../components/Table";
-import axios from "axios";
 import ToolBar from "../../components/ToolBar";
 import { useProducts } from "../../hooks/useProducts";
 
@@ -10,16 +9,26 @@ export default function Products() {
   const [limit, setLimit] = useState(5);
   const [sort, setSort] = useState("asc");
   const [search, setSearch] = useState("");
-  const { list } = useProducts();
+
+  const { list, remove } = useProducts();
 
   async function getAllProducts() {
     setProducts(await list(limit, sort));
+  }
+
+  async function removeProduct(id) {
+    const removedProduct = await remove(id);
+    const newArray = products.filter(
+      (product) => product.id != removedProduct.id
+    );
+    setProducts(newArray);
   }
 
   function handleLimit(value) {
     const finalValue = Number(value);
     setLimit(finalValue);
   }
+
   function handleSort(value) {
     setSort(value);
   }
@@ -27,6 +36,7 @@ export default function Products() {
   function handleSearch(value) {
     setSearch(value);
   }
+
   function filterProducts() {
     const filterWord = search.toLowerCase();
     const newProducts = products.filter((product) => {
@@ -52,8 +62,9 @@ export default function Products() {
     <>
       <ToolBar handleSort={handleSort} handleSearch={handleSearch} />
       <Table
-        products={search ? filteredProducts : products} //operador ternario
+        products={search ? filteredProducts : products}
         handleLimit={handleLimit}
+        deleteFunction={removeProduct}
       />
     </>
   );
